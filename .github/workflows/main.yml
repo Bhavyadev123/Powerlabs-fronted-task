@@ -1,0 +1,40 @@
+name: Node.js CI
+
+on: [push]
+
+jobs:
+  lint_and_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: pnpm/action-setup@v2
+      - name: Use Node.js
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
+      - run: pnpm i  --frozen-lockfile
+      - run: pnpm run lint
+      - run: pnpm run build
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+    - uses: pnpm/action-setup@v2
+    - name: Use Node.js
+      uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
+      with:
+        node-version-file: '.node-version'
+        cache: 'pnpm'
+    - run: pnpm i  --frozen-lockfile
+    - name: Install Playwright Browsers
+      run: pnpm exec playwright install chromium --with-deps
+    - name: Run Playwright tests
+      run: pnpm exec playwright test
+    - uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4
+      if: always()
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 10

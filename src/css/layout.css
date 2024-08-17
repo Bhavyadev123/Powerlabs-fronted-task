@@ -1,0 +1,26 @@
+#main {
+  max-inline-size: calc(45rem + (var(--s-4) * 2));
+  margin-inline: auto;
+  padding: var(--s-5) var(--s-4);
+}
+
+#main[aria-busy='true'] {
+  display: none;
+}
+
+.l-stack {
+  --stack-spacing: var(--s-5);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--stack-spacing);
+}
+
+.l-cluster {
+  --cluster-spacing: var(--s-5);
+  --cluster-align: flex-start;
+  display: flex;
+  place-items: var(--cluster-align);
+  gap: var(--cluster-spacing);
+}
